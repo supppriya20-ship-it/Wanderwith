@@ -4,6 +4,7 @@ requests
 stripe
 openai
 gunicorn
+flask_sqlalchemy
 
 
 
