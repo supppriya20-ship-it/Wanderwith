@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderWith - Your Travel Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .nav-brand h1 {
+            font-size: 2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .profile-icon {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s;
+        }
+
+        .profile-icon:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .trip-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .trip-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+
+        .trip-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .trip-btn.domestic {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .trip-btn.international {
+            background: #2196F3;
+            color: white;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .destinations {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .destinations h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .destination-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .destination-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .destination-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .destination-info {
+            padding: 1.5rem;
+        }
+
+        .destination-info h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .destination-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .destination-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .destination-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #FFD700;
+        }
+
+        .view-details-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .view-details-btn:hover {
+            background: #5568d3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 800px;
+            position: relative;
+            animation: slideDown 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            z-index: 1;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .destination-detail-content h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .trip-info, .inclusions, .exclusions, .reviews {
+            margin: 1.5rem 0;
+        }
+
+        .trip-info h3, .inclusions h3, .exclusions h3, .reviews h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .trip-info p {
+            margin: 0.5rem 0;
+        }
+
+        .inclusions ul, .exclusions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .inclusions li, .exclusions li {
+            padding: 0.5rem;
+            margin: 0.3rem 0;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .inclusions li::before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .exclusions li::before {
+            content: "✗ ";
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .review {
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+
+        .review strong {
+            color: #667eea;
+        }
+
+        .booking-actions {
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn--primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: #5568d3;
+        }
+
+        .btn--secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn--secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn--full-width {
+            width: 100%;
+        }
+
+        .payment-container h3 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-summary {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-summary h4 {
+            margin-bottom: 1rem;
+        }
+
+        .payment-summary input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .payment-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .payment-btn.gpay {
+            background: #4285F4;
+        }
+
+        .payment-btn.paytm {
+            background: #00BAF2;
+        }
+
+        .payment-btn.card {
+            background: #6C63FF;
+        }
+
+        .profile-container {
+            padding: 1rem;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .profile-avatar {
+            font-size: 4rem;
+            background: #667eea;
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-details h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details p {
+            color: #666;
+            margin: 0.3rem 0;
+        }
+
+        .booking-history {
+            margin-top: 2rem;
+        }
+
+        .booking-history h4 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .auth-container {
+            padding: 2rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .auth-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .social-login {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: #999;
+            margin-bottom: 1rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .social-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .terms {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .terms a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3000;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-content h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .success-content button {
+            padding: 0.8rem 2rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1500;
+        }
+
+        .chatbot-header {
+            background: #667eea;
+            color: white;
+            padding: 1rem;
+            border-radius: 15px 15px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .chatbot-body {
+            display: none;
+            flex-direction: column;
+            height: 400px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .user-message, .bot-message {
+            padding: 0.8rem;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background: #f0f0f0;
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-input button {
+            padding: 0.8rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .chat-input button:hover {
+            background: #5568d3;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .trip-buttons {
+                flex-direction: column;
+            }
+
+            .destination-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .chatbot {
+                width: 90%;
+                right: 5%;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                margin: 20px;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>WanderWith</h1>
+                <p class="tagline">Explore. Dream. Discover.</p>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#destinations" class="nav-link">Destinations</a>
+                <a href="#profile" class="nav-link" id="profileLink" style="display:none;">Profile</a>
+                <button class="nav-link" id="loginBtn" onclick="openAuthModal()">Sign In</button>
+                <div class="profile-icon" id="profileIcon" onclick="toggleProfile()" style="display:none;">👤</div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Plan Your Perfect Trip</h2>
+            <p>Discover amazing destinations with guided tours, expense tracking, and seamless payment options</p>
+            
+            <div class="trip-buttons">
+                <button class="trip-btn domestic" onclick="showDestinations('beach')">
+                    Beach Destinations
+                </button>
+                <button class="trip-btn international" onclick="showDestinations('mountain')">
+                    Mountain Adventures
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search destinations..." oninput="filterDestinations()">
+                <button class="search-btn" onclick="filterDestinations()">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="destinations" class="destinations">
+        <h2>Popular Destinations</h2>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="showAllDestinations()">All</button>
+            <button class="filter-btn" onclick="showDestinations('beach')">Beach</button>
+            <button class="filter-btn" onclick="showDestinations('mountain')">Mountain</button>
+            <button class="filter-btn" onclick="showDestinations('cultural')">Cultural</button>
+            <button class="filter-btn" onclick="showDestinations('nature')">Nature</button>
+            <button class="filter-btn" onclick="showDestinations('adventure')">Adventure</button>
+        </div>
+
+        <div id="destinationGrid" class="destination-grid"></div>
+    </section>
+
+    <div id="destinationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <div class="payment-container">
+                <h3>Complete Your Payment</h3>
+                <div id="paymentDetails"></div>
+                <div class="payment-methods">
+                    <button class="payment-btn gpay" onclick="processPayment('gpay')">Google Pay</button>
+                    <button class="payment-btn paytm" onclick="processPayment('paytm')">Paytm</button>
+                    <button class="payment-btn card" onclick="processPayment('card')">Credit/Debit Card</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProfileModal()">&times;</span>
+            <div class="profile-container">
+                <h3>Your Profile</h3>
+                <div id="profileContent"></div>
+                <div class="booking-history">
+                    <h4>Your Bookings</h4>
+                    <div id="userBookings">
+                        <p style="color: #999;">No bookings yet. Start exploring destinations!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                    <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+                </div>
+
+                <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                    <div id="loginError" class="error-message"></div>
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="password-toggle">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('loginPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                    <div class="social-login">
+                        <p>Or continue with</p>
+                        <div class="social-buttons">
+                            <button type="button" class="social-btn" onclick="socialLogin('google')">
+                                <span>G</span> Google
+                            </button>
+                            <button type="button" class="social-btn" onclick="socialLogin('facebook')">
+                                <span>f</span> Facebook
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+                    <div id="signupError" class="error-message"></div>
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPhone">Phone Number</label>
+                        <input type="tel" id="signupPhone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="password-toggle">
+                            <input type="password" id="signupPassword" placeholder="Create a password (min 8 characters)" required minlength="8">
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('signupPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                        <div class="password-toggle">
+                            <input type="password" id="signupConfirmPassword" placeholder="Confirm your password" required>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('signupConfirmPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Create Account</button>
+                    <div class="terms">
+                        By signing up, you agree to our <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+                    </div>
+                    <div class="social-login">
+                        <p>Or sign up with</p>
+                        <div class="social-buttons">
+                            <button type="button" class="social-btn" onclick="socialLogin('google')">
+                                <span>G</span> Google
+                            </button>
+                            <button type="button" class="social-btn" onclick="socialLogin('facebook')">
+                                <span>f</span> Facebook
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="successMessage" class="success-message">
+        <div class="success-content">
+            <h3>Booking Confirmed!</h3>
+            <p>Your trip has been successfully booked. Check your profile for details.</p>
+            <button onclick="hideSuccessMessage()">Continue</button>
+        </div>
+    </div>
+
+    <div id="chatbot" class="chatbot">
+        <div class="chatbot-header" onclick="toggleChatbot()">
+            <span>Travel Assistant</span>
+        </div>
+        <div id="chatbotBody" class="chatbot-body">
+            <div class="chat-messages" id="chatMessages">
+                <div class="bot-message">Hello! I'm your travel assistant. Ask me about destinations, pricing, or booking help!</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatInput(event)">
+                <button onclick="sendChatMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User Management
+        let currentUser = null;
+        let userBookings = [];
+
+        // Destinations Database
+        const destinations = [
+            {
+                id: 1,
+                name: "Goa Beach Paradise",
+                type: "beach",
+                price: 15000,
+                rating: 4.5,
+                image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400",
+                description: "Experience the best of Goa's beaches with this 5-day package",
+                duration: "5 Days / 4 Nights",
+                groupSize: "2-15 people",
+                inclusions: ["Hotel Accommodation", "Breakfast & Dinner", "Airport Transfers", "Sightseeing Tours", "Water Sports Activities"],
+                exclusions: ["Lunch", "Personal Expenses", "Travel Insurance", "Monument Entry Fees"],
+                reviews: [
+                    { name: "Rahul S.", rating: 5, comment: "Amazing experience! The beaches were beautiful." },
+                    { name: "Priya M.", rating: 4, comment: "Great package, well organized tours." }
+                ]
+            },
+            {
+                id: 2,
+                name: "Manali Mountain Retreat",
+                type: "mountain",
+                price: 18000,
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=400",
+                description: "Explore the scenic beauty of Manali with adventure activities",
+                duration: "6 Days / 5 Nights",
+                groupSize: "2-12 people",
+                inclusions: ["Hotel Stay", "All Meals", "Paragliding Session", "Solang Valley Trip", "Local Sightseeing"],
+                exclusions: ["Additional Activities", "Shopping", "Travel Insurance"],
+                reviews: [
+                    { name: "Amit K.", rating: 5, comment: "Perfect mountain getaway!" },
+                    { name: "Sneha P.", rating: 5, comment: "Loved the paragliding experience." }
+                ]
+            },
+            {
+                id: 3,
+                name: "Jaipur Cultural Tour",
+                type: "cultural",
+                price: 12000,
+                rating: 4.3,
+                image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=400",
+                description: "Discover the rich heritage and culture of the Pink City",
+                duration: "4 Days / 3 Nights",
+                groupSize: "2-20 people",
+                inclusions: ["Heritage Hotel Stay", "Breakfast", "City Palace Tour", "Amber Fort Visit", "Local Guide"],
+                exclusions: ["Lunch & Dinner", "Shopping", "Camel Ride"],
+                reviews: [
+                    { name: "Deepak R.", rating: 4, comment: "Rich cultural experience." }
+                ]
+            },
+            {
+                id: 4,
+                name: "Kerala Backwaters",
+                type: "nature",
+                price: 20000,
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400",
+                description: "Relax in the serene backwaters of Kerala",
+                duration: "5 Days / 4 Nights",
+                groupSize: "2-8 people",
+                inclusions: ["Houseboat Stay", "All Meals", "Ayurvedic Massage", "Village Tours", "Kathakali Show"],
+                exclusions: ["Personal Expenses", "Additional Treatments"],
+                reviews: [
+                    { name: "Anjali T.", rating: 5, comment: "Most relaxing vacation ever!" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Ladakh Adventure",
+                type: "adventure",
+                price: 35000,
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+                description: "Epic adventure through the Himalayas",
+                duration: "7 Days / 6 Nights",
+                groupSize: "4-10 people",
+                inclusions: ["Hotels & Camps", "All Meals", "Bike Rental", "Permits", "Experienced Guide"],
+                exclusions: ["Fuel Costs", "Personal Gear", "Travel Insurance"],
+                reviews: [
+                    { name: "Vikram S.", rating: 5, comment: "Trip of a lifetime!" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Andaman Islands",
+                type: "beach",
+                price: 28000,
+                rating: 4.6,
+                image: "https://images.unsplash.com/photo-1589993668178-8f96ce9e9f08?w=400",
+                description: "Pristine beaches and crystal clear waters",
+                duration: "6 Days / 5 Nights",
+                groupSize: "2-12 people",
+                inclusions: ["Resort Stay", "Breakfast & Dinner", "Scuba Diving", "Island Hopping", "Ferry Tickets"],
+                exclusions: ["Lunch", "Additional Water Sports"],
+                reviews: [
+                    { name: "Neha G.", rating: 5, comment: "Paradise on earth!" }
+                ]
+            }
+        ];
+
+        // Authentication Functions
+        function openAuthModal() {
+            document.getElementById('authModal').style.display = 'block';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+            clearAuthForms();
+        }
+
+        function switchAuthTab(tab) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                tabs[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                tabs[1].classList.add('active');
+                document.getElementById('signupForm').classList.add('active');
+            }
+            
+            clearAuthForms();
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem('wanderWithUsers') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = { name: user.name, email: user.email, phone: user.phone };
+                localStorage.setItem('wanderWithCurrentUser', JSON.stringify(currentUser));
+                updateUIForLoggedInUser();
+                closeAuthModal();
+                alert('Welcome back, ' + user.name + '!');
+            } else {
+                showError('loginError', 'Invalid email or password');
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showError('signupError', 'Passwords do not match');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('wanderWithUsers') || '[]');
+            if (users.find(u => u.email === email)) {
+                showError('signupError', 'Email already registered. Please login.');
+                return;
+            }
+            
+            const newUser = { name, email, phone, password };
+            users.push(newUser);
+            localStorage.setItem('wanderWithUsers', JSON.stringify(users));
+            
+            currentUser = { name, email, phone };
+            localStorage.setItem('wanderWithCurrentUser', JSON.stringify(currentUser));
+            updateUIForLoggedInUser();
+            closeAuthModal();
+            alert('Account created successfully! Welcome, ' + name + '!');
+        }
+
+        function socialLogin(provider) {
+            alert('Social login with ' + provider + ' coming soon!');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('wanderWithCurrentUser');
+            updateUIForLoggedOutUser();
+            closeProfileModal();
+            alert('Logged out successfully');
+        }
+
+        function updateUIForLoggedInUser() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('profileIcon').style.display = 'block';
+            document.getElementById('profileLink').style.display = 'block';
+        }
+
+        function updateUIForLoggedOutUser() {
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('profileIcon').style.display = 'none';
+            document.getElementById('profileLink').style.display = 'none';
+        }
+
+        function clearAuthForms() {
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('signupError').style.display = 'none';
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        // Initialize on page load
+        function initializePage() {
+            const savedUser = localStorage.getItem('wanderWithCurrentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUIForLoggedInUser();
+            }
+            
+            userBookings = JSON.parse(localStorage.getItem('wanderWithBookings') || '[]');
+            displayDestinations(destinations);
+        }
+
+        // Destination Display Functions
+        function displayDestinations(destinationsToShow) {
+            const grid = document.getElementById('destinationGrid');
+            grid.innerHTML = '';
+            
+            destinationsToShow.forEach(dest => {
+                const card = createDestinationCard(dest);
+                grid.appendChild(card);
+            });
+        }
+
+        function createDestinationCard(dest) {
+            const card = document.createElement('div');
+            card.className = 'destination-card';
+            card.innerHTML = `
+                <div class="destination-image" style="background-image: url('${dest.image}')">
+                    <span class="destination-type">${dest.type}</span>
+                </div>
+                <div class="destination-info">
+                    <h3>${dest.name}</h3>
+                    <p>${dest.description}</p>
+                    <div class="destination-price">₹${dest.price.toLocaleString()}</div>
+                    <div class="destination-rating">
+                        <span class="stars">${'⭐'.repeat(Math.floor(dest.rating))}</span>
+                        <span>(${dest.rating}/5)</span>
+                    </div>
+                    <button class="view-details-btn" onclick="showDestinationDetails(${dest.id})">
+                        View Details
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        function showDestinations(type) {
+            const filtered = destinations.filter(d => d.type === type);
+            displayDestinations(filtered);
+            updateFilterButtons(type);
+        }
+
+        function showAllDestinations() {
+            displayDestinations(destinations);
+            updateFilterButtons('all');
+        }
+
+        function updateFilterButtons(activeType) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if ((activeType === 'all' && btn.textContent === 'All') ||
+                    btn.textContent.toLowerCase() === activeType) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function filterDestinations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = destinations.filter(d => 
+                d.name.toLowerCase().includes(searchTerm) ||
+                d.description.toLowerCase().includes(searchTerm) ||
+                d.type.toLowerCase().includes(searchTerm)
+            );
+            displayDestinations(filtered);
+        }
+
+        // Modal Functions
+        function showDestinationDetails(id) {
+            const dest = destinations.find(d => d.id === id);
+            if (!dest) return;
+            
+            const modal = document.getElementById('destinationModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="destination-detail-content">
+                    <h2>${dest.name}</h2>
+                    <img src="${dest.image}" alt="${dest.name}" style="width:100%;border-radius:10px;margin:1rem 0;">
+                    
+                    <div class="trip-info">
+                        <h3>Trip Details</h3>
+                        <p><strong>Duration:</strong> ${dest.duration}</p>
+                        <p><strong>Group Size:</strong> ${dest.groupSize}</p>
+                        <p><strong>Price:</strong> ₹${dest.price.toLocaleString()} per person</p>
+                        <p><strong>Rating:</strong> ${'⭐'.repeat(Math.floor(dest.rating))} ${dest.rating}/5</p>
+                    </div>
+                    
+                    <div class="inclusions">
+                        <h3>Inclusions</h3>
+                        <ul>
+                            ${dest.inclusions.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="exclusions">
+                        <h3>Exclusions</h3>
+                        <ul>
+                            ${dest.exclusions.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="reviews">
+                        <h3>Reviews</h3>
+                        ${dest.reviews.map(review => `
+                            <div class="review">
+                                <strong>${review.name}</strong> - ${'⭐'.repeat(review.rating)}
+                                <p>${review.comment}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="booking-actions">
+                        <button class="btn btn--primary btn--full-width" onclick="initiateBooking(${dest.id})">
+                            Book Now - ₹${dest.price.toLocaleString()}
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('destinationModal').style.display = 'none';
+        }
+
+        function initiateBooking(destId) {
+            if (!currentUser) {
+                closeModal();
+                openAuthModal();
+                alert('Please login or sign up to book a trip');
+                return;
+            }
+            
+            const dest = destinations.find(d => d.id === destId);
+            showPaymentModal(dest);
+        }
+
+        // Payment Functions
+        function showPaymentModal(dest) {
+            const modal = document.getElementById('paymentModal');
+            const paymentDetails = document.getElementById('paymentDetails');
+            
+            paymentDetails.innerHTML = `
+                <div class="payment-summary">
+                    <h4>Booking Summary</h4>
+                    <p><strong>Destination:</strong> ${dest.name}</p>
+                    <p><strong>Duration:</strong> ${dest.duration}</p>
+                    <p><strong>Price per person:</strong> ₹${dest.price.toLocaleString()}</p>
+                    <div style="margin-top: 1rem;">
+                        <label><strong>Number of Travelers:</strong></label><br>
+                        <input type="number" id="numTravelers" value="1" min="1" max="15" 
+                            style="margin-top: 0.5rem;" onchange="updatePaymentTotal(${dest.price})">
+                    </div>
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #ddd;">
+                        <p style="font-size: 1.3rem;"><strong>Total Amount:</strong> 
+                            <span style="color: #667eea;">₹<span id="totalAmount">${dest.price.toLocaleString()}</span></span>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            window.currentBookingDest = dest;
+        }
+
+        function updatePaymentTotal(pricePerPerson) {
+            const numTravelers = parseInt(document.getElementById('numTravelers').value) || 1;
+            const total = pricePerPerson * numTravelers;
+            document.getElementById('totalAmount').textContent = total.toLocaleString();
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function processPayment(method) {
+            const numTravelers = parseInt(document.getElementById('numTravelers').value) || 1;
+            const total = window.currentBookingDest.price * numTravelers;
+            
+            const booking = {
+                id: Date.now(),
+                destination: window.currentBookingDest.name,
+                travelers: numTravelers,
+                total: total,
+                date: new Date().toLocaleDateString(),
+                status: 'Confirmed',
+                user: currentUser.email
+            };
+            
+            userBookings.push(booking);
+            localStorage.setItem('wanderWithBookings', JSON.stringify(userBookings));
+            
+            closePaymentModal();
+            closeModal();
+            showSuccessMessage();
+        }
+
+        // Profile Functions
+        function toggleProfile() {
+            if (!currentUser) {
+                openAuthModal();
+                return;
+            }
+            
+            const modal = document.getElementById('profileModal');
+            const profileContent = document.getElementById('profileContent');
+            
+            profileContent.innerHTML = `
+                <div class="profile-info">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-details">
+                        <h4>${currentUser.name}</h4>
+                        <p>📧 ${currentUser.email}</p>
+                        <p>📱 ${currentUser.phone}</p>
+                    </div>
+                </div>
+                <button class="btn btn--secondary btn--full-width" onclick="logout()">Logout</button>
+            `;
+            
+            const userSpecificBookings = userBookings.filter(b => b.user === currentUser.email);
+            const bookingsContainer = document.getElementById('userBookings');
+            
+            if (userSpecificBookings.length === 0) {
+                bookingsContainer.innerHTML = '<p style="color: #999;">No bookings yet. Start exploring destinations!</p>';
+            } else {
+                bookingsContainer.innerHTML = userSpecificBookings.map(booking => `
+                    <div style="background: #f9f9f9; padding: 1rem; border-radius: 8px; margin: 0.5rem 0;">
+                        <h4 style="color: #667eea;">${booking.destination}</h4>
+                        <p><strong>Travelers:</strong> ${booking.travelers}</p>
+                        <p><strong>Total:</strong> ₹${booking.total.toLocaleString()}</p>
+                        <p><strong>Booking Date:</strong> ${booking.date}</p>
+                        <p><strong>Status:</strong> <span style="color: #4CAF50;">${booking.status}</span></p>
+                    </div>
+                `).join('');
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        // Success Message
+        function showSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        function hideSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        // Chatbot Functions
+        function toggleChatbot() {
+            const chatbotBody = document.getElementById('chatbotBody');
+            chatbotBody.style.display = chatbotBody.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            setTimeout(() => {
+                const response = generateBotResponse(message);
+                addChatMessage(response, 'bot');
+            }, 500);
+        }
+
+        function addChatMessage(message, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function generateBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                return 'Our packages range from ₹12,000 to ₹35,000 depending on the destination and duration. Would you like to know about a specific destination?';
+            } else if (lowerMessage.includes('goa') || lowerMessage.includes('beach')) {
+                return 'Our Goa Beach Paradise package is ₹15,000 for 5 days/4 nights. It includes hotel, meals, airport transfers, and water sports! Would you like to book?';
+            } else if (lowerMessage.includes('manali') || lowerMessage.includes('mountain')) {
+                return 'Manali Mountain Retreat is ₹18,000 for 6 days/5 nights with paragliding included! Perfect for adventure lovers.';
+            } else if (lowerMessage.includes('book') || lowerMessage.includes('reserve')) {
+                if (!currentUser) {
+                    return 'To book a trip, please sign up or login first. Click the Sign In button in the navigation bar.';
+                }
+                return 'Great! Browse our destinations above and click "View Details" on any package to book.';
+            } else if (lowerMessage.includes('payment') || lowerMessage.includes('pay')) {
+                return 'We accept Google Pay, Paytm, and Credit/Debit Cards. Payment is secure and instant!';
+            } else if (lowerMessage.includes('cancel') || lowerMessage.includes('refund')) {
+                return 'Cancellations are free up to 7 days before departure. After that, a 30% charge applies. Full refunds for cancellations 15+ days before departure.';
+            } else if (lowerMessage.includes('group') || lowerMessage.includes('people')) {
+                return 'Most of our packages accommodate 2-15 people. Perfect for families, friends, or solo travelers!';
+            } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+                return 'Hello! How can I help you plan your perfect trip today?';
+            } else if (lowerMessage.includes('thank')) {
+                return 'You\'re welcome! Have a great trip!';
+            } else {
+                return 'I can help you with destination info, pricing, bookings, and payments. What would you like to know?';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const destModal = document.getElementById('destinationModal');
+            const paymentModal = document.getElementById('paymentModal');
+            const profileModal = document.getElementById('profileModal');
+            const authModal = document.getElementById('authModal');
+            
+            if (event.target === destModal) {
+                closeModal();
+            } else if (event.target === paymentModal) {
+                closePaymentModal();
+            } else if (event.target === profileModal) {
+                closeProfileModal();
+            } else if (event.target === authModal) {
+                closeAuthModal();
+            }
+        }
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
